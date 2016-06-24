@@ -39,6 +39,20 @@ public class ArrayStack<E> {
         }
     }
 
+    // Returns true if this stack is equal to the given stack.
+    public boolean equals(ArrayStack other) {
+        if (this.size() != other.size()) {
+            return false;
+        } else { // size is the same
+            for (int i = 0; i < this.size(); i++) {
+                if (!this.get(i).equals(other.get(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
     // Returns the data at the specified index. If index is less than 0 or is
     // greater than or equal to the size, throws an IllegalArgumentException.
     private E get(int index) {
