@@ -15,5 +15,10 @@ public class Test {
         System.out.println("Just removed: " + removal);
         System.out.println("Stack after removal: " + stack.toString()); //b[2, 7]
         System.out.println("Size: " + stack.size()); // 2
+        for (int i = 0; i < 11; i++) {
+            stack.push(i);
+        }
+        System.out.println("Stack: " + stack.toString());
+        System.out.println("Size: " + stack.size());
     }
 }
