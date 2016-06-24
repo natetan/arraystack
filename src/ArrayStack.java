@@ -2,47 +2,74 @@
  * Created by Yulong on 6/24/2016.
  *
  * First in, last out structure. Data at the end is the 'top'.
- * b[2, 5, 2]t
+ * b[2, 5, 4]t
  */
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
 
 public class ArrayStack<E> {
-    private List<E> stack;
+    public static final int DEFAULT_CAPACITY = 10;
+
+    private E[] stack;
+    private int size;
 
     public ArrayStack() {
-        this.stack = new ArrayList<>();
+        this(DEFAULT_CAPACITY);
     }
 
-    public void push(E e) {
-        this.stack.add(e);
-    }
-
-    public E pop() {
-        if (this.isEmpty()) {
-            throw new NoSuchElementException();
+    public ArrayStack(int capacity) {
+        if (capacity < 1) {
+            throw new IllegalArgumentException("Capacity can't be negative: " + capacity);
         }
-        return this.stack.remove(this.size() - 1);
+        this.size = 0;
+        this.stack = (E[])new Object[capacity];
     }
 
-    public E peek() {
-        if (this.isEmpty()) {
-            throw new NoSuchElementException();
+    private E get(int index) {
+        if (index < 0 || index >= size) {
+            throw new IllegalArgumentException();
         }
-        return this.stack.get(this.size() - 1);
-    }
-
-    public int size() {
-        return this.stack.size();
+        return this.stack[index];
     }
 
     public boolean isEmpty() {
         return this.size() == 0;
     }
 
+    public E peek() {
+        if (this.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        return this.get(this.size - 1);
+    }
+
+    public E pop() {
+        if (this.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        E data = this.get(this.size - 1);
+        this.size--;
+        return data;
+    }
+
+    public void push(E e) {
+        this.stack[size] = e;
+        this.size++;
+    }
+
+    public int size() {
+        return this.size;
+    }
+
     public String toString() {
-        return "b" + this.stack.toString() + "t";
+        if (this.isEmpty()) {
+            return "[]";
+        } else {
+            String result = "t[" + this.get(this.size - 1);
+            for (int i = this.size - 2; i >= 0; i--) {
+                result += ", " + this.get(i);
+            }
+            return result + "]b";
+        }
     }
 }
