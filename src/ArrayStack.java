@@ -25,6 +25,16 @@ public class ArrayStack<E> {
         this.stack = (E[])new Object[capacity];
     }
 
+    private void ensureCapacity() {
+        if (this.size() >= this.stack.length) {
+            E[] newArray = (E[])new Object[this.stack.length * 2];
+            for (int i = 0; i < this.stack.length; i++) {
+                newArray[i] = this.stack[i];
+            }
+            this.stack = newArray;
+        }
+    }
+
     private E get(int index) {
         if (index < 0 || index >= size) {
             throw new IllegalArgumentException();
@@ -53,7 +63,8 @@ public class ArrayStack<E> {
     }
 
     public void push(E e) {
-        this.stack[size] = e;
+        this.ensureCapacity();
+        this.stack[this.size] = e;
         this.size++;
     }
 
