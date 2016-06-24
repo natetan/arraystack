@@ -20,5 +20,21 @@ public class Test {
         }
         System.out.println("Stack: " + stack.toString());
         System.out.println("Size: " + stack.size());
+
+        // Equality test
+        ArrayStack<Integer> s1 = new ArrayStack<>();
+        ArrayStack<Integer> s2 = new ArrayStack<>();
+        for (int i = 0; i < 5; i++) {
+            s1.push(i);
+            s2.push(i);
+        }
+        System.out.println("s1: " + s1.toString());
+        System.out.println("s2: " + s2.toString());
+        System.out.println("s1 == s2: " + s1.equals(s2)); // true
+        s2.push(6);
+        System.out.println("Added 5 to s2");
+        System.out.println("s1: " + s1.toString());
+        System.out.println("s2: " + s2.toString());
+        System.out.println("s1 == s2: " + s1.equals(s2)); // false
     }
 }
