@@ -30,7 +30,7 @@ public class ArrayStack<E> {
 
     // Ensures that the capcacity of array
     private void ensureCapacity() {
-        if (this.size() >= this.stack.length) {
+        if (this.size >= this.stack.length) {
             E[] newArray = (E[])new Object[this.stack.length * 2];
             for (int i = 0; i < this.stack.length; i++) {
                 newArray[i] = this.stack[i];
@@ -41,7 +41,7 @@ public class ArrayStack<E> {
 
     // Returns true if this stack is equal to the given stack.
     public boolean equals(ArrayStack other) {
-        if (this.size() != other.size()) {
+        if (this.size != other.size) {
             return false;
         } else { // size is the same
             for (int i = 0; i < this.size(); i++) {
@@ -64,7 +64,7 @@ public class ArrayStack<E> {
 
     // Returns true if the stack is empty and false otherwise.
     public boolean isEmpty() {
-        return this.size() == 0;
+        return this.size == 0;
     }
 
     // Returns the data at the 'top' of the stack. If the stack is empty,
