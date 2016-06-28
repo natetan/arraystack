@@ -36,5 +36,10 @@ public class Test {
         System.out.println("s1: " + s1.toString());
         System.out.println("s2: " + s2.toString());
         System.out.println("s1 == s2: " + s1.equals(s2)); // false
+
+        // Sorting
+        System.out.println("Stack: " + s2.toString());
+        s2.sort();
+        System.out.println("After sort: " + s2.toString());
     }
 }

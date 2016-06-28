@@ -99,6 +99,41 @@ public class ArrayStack<E> {
         return this.size;
     }
 
+    // Sorts the stack, from top to bottom
+    public void sort() {
+        if (this.size > 1) {
+            int size1 = this.size / 2;
+            int size2 = this.size - size1;
+            ArrayStack half1 = new ArrayStack();
+            ArrayStack half2 = new ArrayStack();
+            for (int i = 0; i < size1; i++) {
+                half1.push(this.pop());
+            }
+            for (int i = 0; i < size2; i++) {
+                half2.push(this.pop());
+            }
+            half1.sort();
+            half2.sort();
+            this.mergeSort(this, half1, half2);
+        }
+    }
+
+    private void mergeSort(ArrayStack result, ArrayStack half1, ArrayStack half2) {
+        while (!half1.isEmpty() && !half2.isEmpty()) {
+            if (((Comparable) half1.peek()).compareTo(half2.peek()) <= 0) {
+                result.push(half1.pop());
+            } else {
+                result.push(half2.pop());
+            }
+        }
+        while (!half1.isEmpty()) {
+            result.push(half1.pop());
+        }
+        while (!half2.isEmpty()) {
+            result.push(half2.pop());
+        }
+    }
+
     // Returns a string representation of the stack. Top and bottom are specified.
     // Data is inside brackets, with each element separated by commas.
     public String toString() {
