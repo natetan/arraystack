@@ -1,13 +1,14 @@
 /**
- *  Yulong Tan
- *  6.24.16
- *
+ * Yulong Tan
+ * 6.24.16
+ * <p>
  * Array implementation of a stack. First in, last out structure
  */
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class ArrayStack<E> {
+public class ArrayStack<E> implements Iterable<E> {
     public static final int DEFAULT_CAPACITY = 10; // default capacity
 
     private E[] stack;
@@ -25,13 +26,53 @@ public class ArrayStack<E> {
             throw new IllegalArgumentException("Capacity can't be negative: " + capacity);
         }
         this.size = 0;
-        this.stack = (E[])new Object[capacity];
+        this.stack = (E[]) new Object[capacity];
+    }
+
+    private class ArrayStackIterator implements Iterator<E> {
+        private int position;
+        private boolean isRemovable;
+        private ArrayStack stack;
+
+        public ArrayStackIterator(ArrayStack stack) {
+            this.stack = stack;
+            this.position = 0;
+            this.isRemovable = false;
+        }
+
+        public E next() {
+            if (!this.hasNext()) {
+                throw new NoSuchElementException();
+            }
+            E data = (E) this.stack.get(position);
+            this.position++;
+            this.isRemovable = true;
+            return data;
+        }
+
+        public boolean hasNext() {
+            return this.position < this.stack.size();
+        }
+
+        public void remove() {
+            if (!this.isRemovable) {
+                throw new IllegalStateException();
+            }
+            this.stack.remove(this.position - 1);
+            this.position--;
+            this.isRemovable = false;
+        }
+    }
+
+    // Clears the stack
+    public void clear() {
+        this.size = 0;
     }
 
     // Ensures that the capcacity of array
     private void ensureCapacity() {
         if (this.size >= this.stack.length) {
-            E[] newArray = (E[])new Object[this.stack.length * 2];
+            E[] newArray = (E[]) new Object[this.stack.length * 2];
             for (int i = 0; i < this.stack.length; i++) {
                 newArray[i] = this.stack[i];
             }
@@ -67,6 +108,10 @@ public class ArrayStack<E> {
         return this.size == 0;
     }
 
+    public Iterator iterator() {
+        return new ArrayStackIterator(this);
+    }
+
     // Returns the data at the 'top' of the stack. If the stack is empty,
     // it throws a NoSuchElementException.
     public E peek() {
@@ -94,33 +139,56 @@ public class ArrayStack<E> {
         this.size++;
     }
 
+    public E remove() {
+        return this.remove(0);
+    }
+
+    public E remove(int index) {
+        if (index >= this.size) {
+            throw new IndexOutOfBoundsException();
+        }
+        E data = this.stack[index];
+        for (int i = index; i < this.size - 1; i++) {
+            this.stack[i] = this.stack[i + 1];
+        }
+        this.size--;
+        return data;
+    }
+
     // Returns the size of the stack.
     public int size() {
         return this.size;
     }
 
-    // Sorts the stack, from top to bottom
     public void sort() {
-        if (this.size > 1) {
-            int size1 = this.size / 2;
-            int size2 = this.size - size1;
-            ArrayStack half1 = new ArrayStack();
-            ArrayStack half2 = new ArrayStack();
+        E[] toSort = (E[]) new Object[size];
+        for (int i = 0; i < this.size; i++) {
+            toSort[i] = this.stack[i];
+        }
+        this.sort(toSort, this.stack);
+    }
+
+    private void sort(E[] a1, E[] a2) {
+        if (a1.length > 1) {
+            int size1 = a1.length / 2;
+            int size2 = a1.length - size1;
+            E[] half1 = (E[]) new Object[DEFAULT_CAPACITY];
+            E[] half2 = (E[]) new Object[DEFAULT_CAPACITY];
             for (int i = 0; i < size1; i++) {
-                half1.push(this.pop());
+                half1[i] = a1[i];
             }
             for (int i = 0; i < size2; i++) {
-                half2.push(this.pop());
+                half2[i] = a2[i];
             }
-            half1.sort();
-            half2.sort();
-            this.mergeSort(this, half1, half2);
+            this.sort(a1, this.stack);
+            this.sort(a2, this.stack);
+            this.mergeSort(a1, a2, this.stack);
         }
     }
 
-    private void mergeSort(ArrayStack result, ArrayStack half1, ArrayStack half2) {
-        while (!half1.isEmpty() && !half2.isEmpty()) {
-            if (((Comparable) half1.peek()).compareTo(half2.peek()) <= 0) {
+    private void mergeSort(E[] half1, E[] half2, E[] result) {
+        while (half1.length != 0 && half2.length != 0) {
+            if (((Comparable) half1[half1.length - 1]).compareTo(half2[half2.length - 1]) <= 0) {
                 result.push(half1.pop());
             } else {
                 result.push(half2.pop());
