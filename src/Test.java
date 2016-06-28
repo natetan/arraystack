@@ -38,8 +38,15 @@ public class Test {
         System.out.println("s1 == s2: " + s1.equals(s2)); // false
 
         // Sorting
-        System.out.println("Stack: " + s2.toString());
-        s2.sort();
-        System.out.println("After sort: " + s2.toString());
+        ArrayStack<Integer> s3 = new ArrayStack<>();
+        s3.push(4);
+        s3.push(3);
+        s3.push(7);
+        s3.push(8);
+        s3.push(1);
+        s3.push(12);
+        System.out.println("Stack: " + s3.toString());
+        s3.sort();
+        System.out.println("After sort: " + s3.toString());
     }
 }
