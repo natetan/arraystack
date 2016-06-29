@@ -47,7 +47,7 @@ public class Test {
         s3.push(12);
         s3.push(5);
         System.out.println("Stack: " + s3.toString());
-        s3.sort();
+        s3.mergeSort();
         System.out.println("After sort: " + s3.toString());
     }
 }
