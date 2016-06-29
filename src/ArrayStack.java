@@ -5,6 +5,7 @@
  * Array implementation of a stack. First in, last out structure
  */
 
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -161,15 +162,16 @@ public class ArrayStack<E> implements Iterable<E> {
     }
 
     public void sort() {
-        E[] toSort = (E[]) new Object[size];
-        for (int i = 0; i < this.size; i++) {
-            toSort[i] = this.stack[i];
+        E[] result = this.sort(this.stack);
+        for (int i = 0; i < result.length; i++) {
+            this.stack[i] = result[i];
         }
-        this.sort(toSort, this.stack);
     }
 
-    private void sort(E[] array, E[] result) {
-        if (array.length > 1) {
+    private E[] sort(E[] array) {
+        if (array.length == 1) {
+            return array;
+        } else {
             int size1 = array.length / 2;
             int size2 = array.length - size1;
             E[] half1 = (E[]) new Object[size1];
@@ -180,13 +182,14 @@ public class ArrayStack<E> implements Iterable<E> {
             for (int i = 0; i < half2.length; i++) {
                 half2[i] = array[i + half1.length];
             }
-            this.sort(half1, result);
-            this.sort(half2, result);
-            this.mergeSort(half1, half2, result);
+            half1 = this.sort(half1);
+            half2 = this.sort(half2);
+            return this.mergeSort(half1, half2);
         }
     }
 
-    private void mergeSort(E[] half1, E[] half2, E[] result) {
+    private E[] mergeSort(E[] half1, E[] half2) {
+        E[] result = (E[]) new Object[half1.length + half2.length];
         int pos1 = 0;
         int pos2 = 0;
         int pos3 = 0;
@@ -210,6 +213,7 @@ public class ArrayStack<E> implements Iterable<E> {
             pos2++;
             pos3++;
         }
+        return result;
     }
 
     // Returns a string representation of the stack. Top and bottom are specified.
