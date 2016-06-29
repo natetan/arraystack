@@ -166,7 +166,6 @@ public class ArrayStack<E> implements Iterable<E> {
             toSort[i] = this.stack[i];
         }
         this.sort(toSort, this.stack);
-        this.stack = toSort;
     }
 
     private void sort(E[] array, E[] result) {
@@ -175,11 +174,11 @@ public class ArrayStack<E> implements Iterable<E> {
             int size2 = array.length - size1;
             E[] half1 = (E[]) new Object[size1];
             E[] half2 = (E[]) new Object[size2];
-            for (int i = 0; i < size1; i++) {
+            for (int i = 0; i < half1.length; i++) {
                 half1[i] = array[i];
             }
-            for (int i = 0; i < size2; i++) {
-                half2[i] = array[i];
+            for (int i = 0; i < half2.length; i++) {
+                half2[i] = array[i + half1.length];
             }
             this.sort(half1, result);
             this.sort(half2, result);
