@@ -191,7 +191,7 @@ public class ArrayStack<E> implements Iterable<E> {
         int pos2 = 0;
         int pos3 = 0;
         while (pos1 < half1.length && pos2 < half2.length) {
-            if (((Comparable) half1[pos1]).compareTo(half2[pos1]) <= 0) {
+            if (((Comparable) half1[pos1]).compareTo(half2[pos2]) <= 0) {
                 result[pos3] = half1[pos1];
                 pos1++;
             } else {
