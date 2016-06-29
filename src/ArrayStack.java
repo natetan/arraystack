@@ -1,11 +1,9 @@
 /**
  * Yulong Tan
  * 6.24.16
- * <p>
  * Array implementation of a stack. First in, last out structure
  */
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -109,8 +107,74 @@ public class ArrayStack<E> implements Iterable<E> {
         return this.size == 0;
     }
 
+    // Returns an iterator over the ArrayStack
     public Iterator iterator() {
         return new ArrayStackIterator(this);
+    }
+
+    // Sorts the stack
+    public void mergeSort() {
+        E[] result = (E[])new Object[this.size];
+        // Hard copy data over from size to avoid null
+        for (int i = 0; i < this.size; i++) {
+            result[i] = this.stack[i];
+        }
+        result = mergeSort(result);
+        // Transfers sorted result into field
+        this.stack = result;
+    }
+
+    // Splits the arrays apart for merging
+    private E[] mergeSort(E[] array) {
+        // Don't need to sort if there's only 1
+        if (array.length == 1) {
+            return array;
+        } else {
+            int size1 = array.length / 2;
+            int size2 = array.length - size1;
+            E[] half1 = (E[]) new Object[size1];
+            E[] half2 = (E[]) new Object[size2];
+            for (int i = 0; i < half1.length; i++) {
+                half1[i] = array[i];
+            }
+            for (int i = 0; i < half2.length; i++) {
+                half2[i] = array[i + half1.length];
+            }
+            half1 = this.mergeSort(half1);
+            half2 = this.mergeSort(half2);
+            return this.mergeSort(half1, half2);
+        }
+    }
+
+    // Combines the parts of the array back together
+    private E[] mergeSort(E[] half1, E[] half2) {
+        E[] result = (E[]) new Object[half1.length + half2.length];
+        // Keeps track of the arrays' index positions
+        int pos1 = 0;
+        int pos2 = 0;
+        int pos3 = 0;
+        while (pos1 < half1.length && pos2 < half2.length) {
+            if (((Comparable) half1[pos1]).compareTo(half2[pos2]) <= 0) {
+                result[pos3] = half1[pos1];
+                pos1++;
+            } else {
+                result[pos3] = half2[pos2];
+                pos2++;
+            }
+            pos3++;
+        }
+        // Add in the remaining elements (if any)
+        while (pos1 < half1.length) {
+            result[pos3] = half1[pos1];
+            pos1++;
+            pos3++;
+        }
+        while (pos2 < half2.length) {
+            result[pos3] = half2[pos2];
+            pos2++;
+            pos3++;
+        }
+        return result;
     }
 
     // Returns the data at the 'top' of the stack. If the stack is empty,
@@ -159,61 +223,6 @@ public class ArrayStack<E> implements Iterable<E> {
     // Returns the size of the stack.
     public int size() {
         return this.size;
-    }
-
-    public void sort() {
-        E[] result = this.sort(this.stack);
-        for (int i = 0; i < result.length; i++) {
-            this.stack[i] = result[i];
-        }
-    }
-
-    private E[] sort(E[] array) {
-        if (array.length == 1) {
-            return array;
-        } else {
-            int size1 = array.length / 2;
-            int size2 = array.length - size1;
-            E[] half1 = (E[]) new Object[size1];
-            E[] half2 = (E[]) new Object[size2];
-            for (int i = 0; i < half1.length; i++) {
-                half1[i] = array[i];
-            }
-            for (int i = 0; i < half2.length; i++) {
-                half2[i] = array[i + half1.length];
-            }
-            half1 = this.sort(half1);
-            half2 = this.sort(half2);
-            return this.mergeSort(half1, half2);
-        }
-    }
-
-    private E[] mergeSort(E[] half1, E[] half2) {
-        E[] result = (E[]) new Object[half1.length + half2.length];
-        int pos1 = 0;
-        int pos2 = 0;
-        int pos3 = 0;
-        while (pos1 < half1.length && pos2 < half2.length) {
-            if (((Comparable) half1[pos1]).compareTo(half2[pos2]) <= 0) {
-                result[pos3] = half1[pos1];
-                pos1++;
-            } else {
-                result[pos3] = half2[pos2];
-                pos2++;
-            }
-            pos3++;
-        }
-        while (pos1 < half1.length) {
-            result[pos3] = half1[pos1];
-            pos1++;
-            pos3++;
-        }
-        while (pos2 < half2.length) {
-            result[pos3] = half2[pos2];
-            pos2++;
-            pos3++;
-        }
-        return result;
     }
 
     // Returns a string representation of the stack. Top and bottom are specified.
