@@ -168,38 +168,49 @@ public class ArrayStack<E> implements Iterable<E> {
         this.sort(toSort, this.stack);
     }
 
-    private void sort(E[] a1, E[] a2) {
-        if (a1.length > 1) {
-            int size1 = a1.length / 2;
-            int size2 = a1.length - size1;
-            E[] half1 = (E[]) new Object[DEFAULT_CAPACITY];
-            E[] half2 = (E[]) new Object[DEFAULT_CAPACITY];
+    private void sort(E[] array, E[] result) {
+        if (array.length > 1) {
+            int size1 = array.length / 2;
+            int size2 = array.length - size1;
+            E[] half1 = (E[]) new Object[size1];
+            E[] half2 = (E[]) new Object[size2];
             for (int i = 0; i < size1; i++) {
-                half1[i] = a1[i];
+                half1[i] = array[i];
             }
             for (int i = 0; i < size2; i++) {
-                half2[i] = a2[i];
+                half2[i] = array[i];
             }
-            this.sort(a1, this.stack);
-            this.sort(a2, this.stack);
-            this.mergeSort(a1, a2, this.stack);
+            this.sort(half1, this.stack);
+            this.sort(half2, this.stack);
+            this.mergeSort(half1, half2, this.stack);
         }
     }
 
     private void mergeSort(E[] half1, E[] half2, E[] result) {
-        while (half1.length != 0 && half2.length != 0) {
-            if (((Comparable) half1[half1.length - 1]).compareTo(half2[half2.length - 1]) <= 0) {
-                result.push(half1.pop());
+        int pos1 = 0;
+        int pos2 = 0;
+        int pos3 = 0;
+        while (pos1 < half1.length && pos2 < half2.length) {
+            if (((Comparable) half1[pos1]).compareTo(half2[pos1]) <= 0) {
+                result[pos3] = half1[pos1];
+                pos1++;
             } else {
-                result.push(half2.pop());
+                result[pos3] = half2[pos2];
+                pos2++;
             }
+            pos3++;
         }
-        while (!half1.isEmpty()) {
-            result.push(half1.pop());
+        while (pos1 < half1.length) {
+            result[pos3] = half1[pos1];
+            pos1++;
+            pos3++;
         }
-        while (!half2.isEmpty()) {
-            result.push(half2.pop());
+        while (pos2 < half2.length) {
+            result[pos3] = half2[pos2];
+            pos2++;
+            pos3++;
         }
+        this.stack = result;
     }
 
     // Returns a string representation of the stack. Top and bottom are specified.
