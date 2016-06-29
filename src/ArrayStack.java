@@ -166,6 +166,7 @@ public class ArrayStack<E> implements Iterable<E> {
             toSort[i] = this.stack[i];
         }
         this.sort(toSort, this.stack);
+        this.stack = toSort;
     }
 
     private void sort(E[] array, E[] result) {
@@ -180,9 +181,9 @@ public class ArrayStack<E> implements Iterable<E> {
             for (int i = 0; i < size2; i++) {
                 half2[i] = array[i];
             }
-            this.sort(half1, this.stack);
-            this.sort(half2, this.stack);
-            this.mergeSort(half1, half2, this.stack);
+            this.sort(half1, result);
+            this.sort(half2, result);
+            this.mergeSort(half1, half2, result);
         }
     }
 
@@ -210,7 +211,6 @@ public class ArrayStack<E> implements Iterable<E> {
             pos2++;
             pos3++;
         }
-        this.stack = result;
     }
 
     // Returns a string representation of the stack. Top and bottom are specified.
