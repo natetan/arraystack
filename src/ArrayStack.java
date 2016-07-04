@@ -204,10 +204,17 @@ public class ArrayStack<E> implements Iterable<E> {
         this.size++;
     }
 
+    public void quickSort() {
+        
+    }
+
+    // Removes element at first index.
     public E remove() {
         return this.remove(0);
     }
 
+    // Removes element at the given index. If index >= size,
+    // throws IndexOutOfBoundsException.
     public E remove(int index) {
         if (index >= this.size) {
             throw new IndexOutOfBoundsException();
